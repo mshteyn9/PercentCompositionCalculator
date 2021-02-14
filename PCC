@@ -1,0 +1,269 @@
+using System;
+
+namespace PercentCompositionCalculator
+{
+    class CompositionCalculator
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello, Welcome to Percent Composition Calculator coded by Mark");
+            Console.WriteLine("This calculator will measure the percent composition of a given element.");
+            Console.WriteLine("For this program to work correctly, you must follow the directions and make sure that there are no grammar or spelling mistakes.");
+
+            int countN = 0;
+            Console.WriteLine("Please enter the number of different elements in your compound?");
+            Element[] element = new Element[int.Parse(Console.ReadLine())];
+
+            for (int i = 0; i < element.Length; i++)
+            {
+                CreateElement(countN, element);
+                countN++;
+            }
+
+            Compound compound = new Compound();
+            CompileMass(compound, element);
+
+            Console.WriteLine("Now, please specify which element you would like me to calculate the percent composition of...");
+            Element userElement = new Element();
+            userElement.symbol = Console.ReadLine();
+            LookForElement(userElement, element);
+            CalculatePercentComposition(userElement, compound.totalMass);
+
+            Console.WriteLine("\n" + "The Percent Composition of " + userElement.symbol + " in your compound is " + userElement.percentComposition);
+
+            Console.WriteLine("Would you like too see the work? (Yes) (No)");
+            CheckIfShowWork(Console.ReadLine(), element, compound, userElement);
+
+            Console.WriteLine("\n" + "Thank you for using Percent Composition Calculator by Mark Shteyn." + "\n" + "\n" + "\n" + "\n" + "\n" + "\n");
+        }
+
+        static void CreateElement(int countN, Element[] element)
+        {
+            Console.WriteLine("Please enter element " + (countN + 1) + "'s symbol. (For Example --> Mg)");
+            string symbol = Console.ReadLine();
+            Console.WriteLine("Now enter the number of atoms of that element that appear in the compound.");
+            int quantity = int.Parse(Console.ReadLine());
+
+            InitializeElement(symbol, quantity, countN, element);
+        }
+        static void InitializeElement(string symbol, int quantity, int countN, Element[] element)
+        {
+            Element e = new Element();
+            e.symbol = symbol;
+            e.quantity = quantity;
+            DetermineElement(e.symbol, e);
+            e.totalMass = MathF.Round(e.mass * e.quantity, 2);
+
+            element[countN] = e;
+            Console.WriteLine(element[countN].totalMass);
+        }
+
+        static void DetermineElement(string symbol, Element e)
+        {
+            switch (symbol)
+            {
+                case "H":
+                    e.mass = 1.01f;
+                    break;
+                case "Li":
+                    e.mass = 6.94f;
+                    break;
+                case "Na":
+                    e.mass = 22.99f;
+                    break;
+                case "K":
+                    e.mass = 39.10f;
+                    break;
+                case "Cs":
+                    e.mass = 132.91f;
+                    break;
+                case "Fr":
+                    e.mass = 223.02f;
+                    break;
+                case "Mg":
+                    e.mass = 24.31f;
+                    break;
+                case "Ca":
+                    e.mass = 40.08f;
+                    break;
+                case "Sr":
+                    e.mass = 87.62f;
+                    break;
+                case "Ba":
+                    e.mass = 137.34f;
+                    break;
+                case "Ra":
+                    e.mass = 226.03f;
+                    break;
+                case "Ti":
+                    e.mass = 47.87f;
+                    break;
+                case "Mn":
+                    e.mass = 54.94f;
+                    break;
+                case "Fe":
+                    e.mass = 55.85f;
+                    break;
+                case "Co":
+                    e.mass = 58.93f;
+                    break;
+                case "Ni":
+                    e.mass = 58.69f;
+                    break;
+                case "Cu":
+                    e.mass = 63.55f;
+                    break;
+                case "Ag":
+                    e.mass = 107.87f;
+                    break;
+                case "Au":
+                    e.mass = 196.97f;
+                    break;
+                case "Zn":
+                    e.mass = 65.39f;
+                    break;
+                case "B":
+                    e.mass = 10.81f;
+                    break;
+                case "Al":
+                    e.mass = 26.98f;
+                    break;
+                case "Ga":
+                    e.mass = 69.72f;
+                    break;
+                case "C":
+                    e.mass = 12.01f;
+                    break;
+                case "Si":
+                    e.mass = 28.09f;
+                    break;
+                case "Ge":
+                    e.mass = 72.61f;
+                    break;
+                case "Sn":
+                    e.mass = 118.71f;
+                    break;
+                case "Pb":
+                    e.mass = 207.19f;
+                    break;
+                case "N":
+                    e.mass = 14.01f;
+                    break;
+                case "P":
+                    e.mass = 30.97f;
+                    break;
+                case "As":
+                    e.mass = 74.92f;
+                    break;
+                case "Sb":
+                    e.mass = 121.76f;
+                    break;
+                case "O":
+                    e.mass = 16.00f;
+                    break;
+                case "S":
+                    e.mass = 32.06f;
+                    break;
+                case "Se":
+                    e.mass = 78.96f;
+                    break;
+                case "F":
+                    e.mass = 19.00f;
+                    break;
+                case "Cl":
+                    e.mass = 35.45f;
+                    break;
+                case "Br":
+                    e.mass = 79.90f;
+                    break;
+                case "I":
+                    e.mass = 126.90f;
+                    break;
+                case "At":
+                    e.mass = 209.99f;
+                    break;
+                case "He":
+                    e.mass = 4.003f;
+                    break;
+                case "Ne":
+                    e.mass = 20.18f;
+                    break;
+                case "Ar":
+                    e.mass = 39.95f;
+                    break;
+                case "Kr":
+                    e.mass = 83.80f;
+                    break;
+                case "Xe":
+                    e.mass = 131.30f;
+                    break;
+                case "Rn":
+                    e.mass = 222.02f;
+                    break;
+            }
+        }
+
+        static void CompileMass(Compound compound, Element[] element)
+        {
+            foreach (Element e in element)
+            {
+                compound.totalMass += e.totalMass;
+            }
+        }
+
+        static void LookForElement(Element uElement, Element[] eArray)
+        {
+            for (int i = 0; i < eArray.Length; i++)
+            {
+                if (eArray[i].symbol == uElement.symbol)
+                {
+                    uElement.totalMass = eArray[i].totalMass;
+                }
+            }
+        }
+
+        static void CalculatePercentComposition(Element uElement, float tM)
+        {
+            float tmpComp1 = uElement.totalMass / tM;
+            float tmpComp2 = MathF.Round(tmpComp1 * 100, 2);
+            uElement.percentComposition = tmpComp2 + "%";
+        }
+
+        static void CheckIfShowWork(string input, Element[] element, Compound compound, Element uElement)
+        {
+            if ((input == "Yes") || (input == "yes"))
+            {
+                ShowWork(element, compound, uElement);
+            }
+
+            static void ShowWork(Element[] element, Compound compound, Element uElement)
+            {
+                foreach(Element e in element)
+                {
+                    Console.WriteLine("Element " + e.symbol + "'s total mass = " + e.totalMass + "g/mol");
+                }
+
+                Console.WriteLine("If you add the masses of all of the elements above, you will get " + compound.totalMass + "g/mol as the compounds total mass.");
+                Console.WriteLine("Since you selected " + uElement.symbol + " as your element, you divide its total mass (" + uElement.totalMass + "g) by the total mass of the compound (" + compound.totalMass + "g).");
+                Console.WriteLine("After calculating that, you should get " + uElement.totalMass/compound.totalMass + ".");
+                Console.WriteLine("Finally, you just multiply the answer above by 100 and round to get the percent number, which would be " + uElement.percentComposition);
+                Console.WriteLine("You final answer would calculate to be " + uElement.percentComposition);
+            }
+        }
+
+
+        class Element
+        {
+            public string symbol;
+            public int quantity;
+            public float mass;
+            public float totalMass;
+            public string percentComposition;
+        }
+
+        class Compound
+        {
+            public float totalMass;
+        }
+    }
+}
